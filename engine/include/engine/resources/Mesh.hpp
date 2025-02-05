@@ -33,16 +33,17 @@ class Mesh {
 
 public:
 
-    /**
-    * @brief Draws the mesh using a given shader. Called by the @ref Model::draw function to draw all the meshes in the model.
-    * @param shader The shader to use for drawing.
-    */
-    void draw(const Shader *shader);
+        /**
+        * @brief Draws the mesh using a given shader. Called by the @ref Model::draw function to draw all the meshes in the model.
+        * @param shader The shader to use for drawing.
+        */
+        void draw(const Shader *shader);
+        void draw_instanced(const Shader *shader, int amount);
 
-    /**
-    * @brief Destroys the mesh in the OpenGL context.
-    */
-    void destroy();
+        /**
+         * @brief Destroys the mesh in the OpenGL context.
+         */
+        void destroy();
 
 private:
     /**
