@@ -30,6 +30,7 @@ namespace app {
         void draw_tree();
         void draw_light();
         void draw_street_lamp();
+        void draw_butterflies_delayed();
         void draw() override;
         void begin_draw() override;
         void end_draw() override;

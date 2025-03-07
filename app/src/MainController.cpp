@@ -7,16 +7,13 @@
 #include <engine/platform/PlatformController.hpp>
 #include <engine/resources/ResourcesController.hpp>
 
-#include "../include/MainController.hpp"
+#include "MainController.hpp"
 
 #include <GuiController.hpp>
-#include <iostream>
+#include <random>
 #include <spdlog/spdlog.h>
-#include <wayland-client-core.h>
 
-#include "../../engine/libs/assimp/code/AssetLib/3MF/3MFXmlTags.h"
 #include "../../engine/libs/glad/include/glad/glad.h"
-#include "../../engine/libs/glfw/include/GLFW/glfw3.h"
 
 namespace engine::test::app {
     class GUIController;
@@ -223,6 +220,8 @@ namespace app {
     void MainController::draw_butterfly_instanced() {
         auto resources                      = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics                       = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform                       = engine::core::Controller::get<engine::platform::PlatformController>();
+        auto current_time                   = platform->frame_time().current;
         engine::resources::Model *butterfly = resources->model("butterfly");
         engine::resources::Shader *shader   = resources->shader("instancing");
         auto camera                         = graphics->camera();
@@ -230,36 +229,42 @@ namespace app {
         unsigned int amount = 200;
         glm::mat4 *modelMatrices;
         modelMatrices = new glm::mat4[amount];
-        srand(glfwGetTime());
+        srand(current_time);
         float offset        = 1.5f;
         glm::vec3 gazeboPos = glm::vec3(20.0f, -3.0f, 0.0f);
+
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<float> dist(-offset, offset);
 
         for (unsigned int i = 0; i < amount; i++) {
             glm::mat4 model    = glm::mat4(1.0f);
             float angle        = (float) i / (float) amount * 360.0f;
-            float displacement = (rand() % (int) (2 * offset * 100)) / 100.0f - offset;
+            float displacement = dist(mt);
             float x            = sin(angle) * radius + displacement;
-            displacement       = (rand() % (int) (2 * offset * 100)) / 100.0f - offset;
+            displacement       = dist(mt);
             float y            = displacement * 0.4f;
-            displacement       = (rand() % (int) (2 * offset * 100)) / 100.0f - offset;
+            displacement       = dist(mt);
             float z            = cos(angle) * radius + displacement;
             model              = glm::translate(model, gazeboPos + glm::vec3(x, y, z));
 
             float scale = 0.5f;
             model       = glm::scale(model, glm::vec3(scale));
 
-            float rotAngle = static_cast<float>((rand() % 360));
-            model          = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+            std::uniform_real_distribution<float> angle_dist(0.0f, 360.0f);
+            float rotAngle = angle_dist(mt);
+            model          = glm::rotate(model, glm::radians(rotAngle), glm::vec3(0.4f, 0.6f, 0.8f));
 
             modelMatrices[i] = model;
         }
-
+        delete[] modelMatrices;
         unsigned int buffer;
+
         glGenBuffers(1, &buffer);
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
         for (unsigned int i = 0; i < butterfly->meshes().size(); i++) {
-            unsigned int VAO = butterfly->meshes()[i].vao;
+            unsigned int VAO = butterfly->meshes()[i].get_vao();
             glBindVertexArray(VAO);
             std::size_t vec4Size = sizeof(glm::vec4);
             glEnableVertexAttribArray(3);
@@ -294,17 +299,8 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
-        for (unsigned int i = 0; i < butterfly->meshes().size(); i++) {
-            glBindVertexArray(butterfly->meshes()[i].vao);
 
-            for (unsigned int j = 0; j < butterfly->meshes()[i].m_textures.size(); j++) {
-                glActiveTexture(GL_TEXTURE0 + j);
-                glBindTexture(GL_TEXTURE_2D, butterfly->meshes()[i].m_textures[j]->id());
-            }
-
-            glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(butterfly->meshes()[i].num_indices),
-                                    GL_UNSIGNED_INT, 0, amount);
-        }
+        butterfly->draw_instanced(shader, amount);
     }
     void MainController::draw_garden() {
         auto resources                    = engine::core::Controller::get<engine::resources::ResourcesController>();
@@ -493,25 +489,29 @@ namespace app {
         }
     }
 
+    void MainController::draw_butterflies_delayed() {
+        auto platform                = engine::core::Controller::get<engine::platform::PlatformController>();
+        auto current_time            = platform->frame_time().current;
+        static double butterflyDelay = -1.0;
+        double delay                 = 3.0;
+        if (light_gazebo > 50.0f) {
+            draw_statue();
+            if (butterflyDelay < 0)
+                butterflyDelay = current_time;
+
+            if (current_time - butterflyDelay >= delay)
+                draw_butterfly_instanced();
+        } else
+            butterflyDelay = -1.0;
+    }
+
     void MainController::draw() {
         draw_terrain();
         draw_temple();
         draw_gazebo();
         draw_columns();
         draw_tree();
-
-        static double butterflyDelay = -1.0;
-        double delay                 = 3.0;
-        if (light_gazebo > 50.0f) {
-            draw_statue();
-            if (butterflyDelay < 0)
-                butterflyDelay = glfwGetTime();
-
-            if (glfwGetTime() - butterflyDelay >= delay)
-                draw_butterfly_instanced();
-        } else
-            butterflyDelay = -1.0;
-
+        draw_butterflies_delayed();
         draw_garden();
         draw_light();
         draw_street_lamp();

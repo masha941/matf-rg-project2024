@@ -23,10 +23,11 @@ namespace engine::resources {
         * @param shader The shader to use for drawing.
         */  
         void draw(const Shader *shader);
+        void draw_instanced(const Shader *shader, int amount);
 
         /**
-        * @brief Destroys the model in the OpenGL context.
-        */  
+         * @brief Destroys the model in the OpenGL context.
+         */  
         void destroy();
 
         /**
@@ -52,20 +53,7 @@ namespace engine::resources {
         const std::string &name() const {
             return m_name;
         }
-        /**
-        * @brief The meshes in the model.
-        */
-        std::vector<Mesh> m_meshes;
-        /**
-        * @brief The path to the model file from which the model was loaded.
-        */
-        std::filesystem::path m_path;
-        /**
-        * @brief The name of the model by which it can be referenced using the @ref engine::resources::ResourcesController::model function.
-        */
-        std::string m_name;
 
-        std::vector<Texture *> m_textures;
 
         Model() = default;
 
@@ -80,6 +68,21 @@ namespace engine::resources {
                               , m_path(std::move(path))
                               , m_name(std::move(name)) {
         }
+    private:
+        /**
+        * @brief The meshes in the model.
+        */
+        std::vector<Mesh> m_meshes;
+        /**
+        * @brief The path to the model file from which the model was loaded.
+        */
+        std::filesystem::path m_path;
+        /**
+        * @brief The name of the model by which it can be referenced using the @ref engine::resources::ResourcesController::model function.
+        */
+        std::string m_name;
+
+        std::vector<Texture *> m_textures;
 
     };
 } // namespace engine

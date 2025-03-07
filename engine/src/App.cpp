@@ -14,8 +14,6 @@
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <iostream>
 
 namespace engine::core {
@@ -38,9 +36,6 @@ namespace engine::core {
                 auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
                 platform->swap_buffers();
             }
-            ImGui_ImplOpenGL3_Shutdown();
-            ImGui_ImplGlfw_Shutdown();
-            ImGui::DestroyContext();
 
             terminate();
         } catch (const util::Error &e) {

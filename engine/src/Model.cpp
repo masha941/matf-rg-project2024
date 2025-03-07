@@ -4,16 +4,23 @@
 
 namespace engine::resources {
 
-void Model::draw(const Shader *shader) {
-    shader->use();
-    for (auto &mesh: m_meshes) {
-        mesh.draw(shader);
+    void Model::draw(const Shader *shader) {
+        shader->use();
+        for (auto &mesh: m_meshes) {
+            mesh.draw(shader);
+        }
     }
-}
 
-void Model::destroy() {
-    for (auto &mesh: m_meshes) {
-        mesh.destroy();
+    void Model::draw_instanced(const Shader *shader, int amount) {
+        shader->use();
+        for (auto &mesh: m_meshes) {
+            mesh.draw_instanced(shader, amount);
+        }
     }
-}
+
+    void Model::destroy() {
+        for (auto &mesh: m_meshes) {
+            mesh.destroy();
+        }
+    }
 }
