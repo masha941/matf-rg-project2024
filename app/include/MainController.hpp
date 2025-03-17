@@ -31,6 +31,8 @@ namespace app {
         void draw_light();
         void draw_street_lamp();
         void draw_butterflies_delayed();
+        void prepare_hdr();
+        void finalize_bloom();
         void draw() override;
         void begin_draw() override;
         void end_draw() override;

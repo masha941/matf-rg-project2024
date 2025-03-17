@@ -67,16 +67,7 @@ namespace engine::core {
          * @endcode
          */
         int run(int argc, char **argv);
-        unsigned int pingpongFBO[2];
-        unsigned int pingpongColorbuffers[2];
-        unsigned int quadVAO = 0;
-        unsigned int quadVBO;
-        unsigned int hdrFBO;
-        unsigned int colorBuffers[2];
-        float exposure = 1.0f;
-        bool bloom = true;
-        const unsigned int SCR_WIDTH = 1920;
-        const unsigned int SCR_HEIGHT = 1080;
+
 
 
     private:

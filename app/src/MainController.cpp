@@ -2,18 +2,18 @@
 // Created by masa on 29/01/25.
 //
 
+#include <engine/graphics/BloomEffectController.hpp>
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformController.hpp>
 #include <engine/resources/ResourcesController.hpp>
+#include "../../engine/libs/glad/include/glad/glad.h"
 
 #include "MainController.hpp"
 
 #include <GuiController.hpp>
 #include <random>
 #include <spdlog/spdlog.h>
-
-#include "../../engine/libs/glad/include/glad/glad.h"
 
 namespace engine::test::app {
     class GUIController;
@@ -505,7 +505,26 @@ namespace app {
             butterflyDelay = -1.0;
     }
 
+    void MainController::prepare_hdr() {
+        auto bloom = engine::core::Controller::get<engine::graphics::BloomEffectController>();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, bloom->hdrFBO);
+        glViewport(0, 0, bloom->SCR_WIDTH, bloom->SCR_HEIGHT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void MainController::finalize_bloom() {
+        auto bloom    = engine::core::Controller::get<engine::graphics::BloomEffectController>();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        bloom->render_bloom();
+        platform->swap_buffers();
+    }
+
     void MainController::draw() {
+        prepare_hdr();
+
         draw_terrain();
         draw_temple();
         draw_gazebo();
@@ -516,5 +535,7 @@ namespace app {
         draw_light();
         draw_street_lamp();
         draw_skybox();
+
+        finalize_bloom();
     }
 } // namespace app

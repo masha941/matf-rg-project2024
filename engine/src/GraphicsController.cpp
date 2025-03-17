@@ -86,4 +86,31 @@ namespace engine::graphics {
         CHECKED_GL_CALL(glDepthFunc, GL_LESS); // set depth function back to default
         CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_CUBE_MAP, 0);
     }
+
+    void GraphicsController::renderQuad() {
+
+        if (m_quadVAO == 0) {
+            float quadVertices[] = {
+                -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 1.0f,  -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+            CHECKED_GL_CALL(glGenVertexArrays,1, &m_quadVAO);
+            CHECKED_GL_CALL(glGenBuffers,1,&m_quadVBO);
+            CHECKED_GL_CALL(glBindVertexArray,m_quadVAO);
+            CHECKED_GL_CALL(glBindBuffer,GL_ARRAY_BUFFER, m_quadVBO);
+            CHECKED_GL_CALL(glBufferData,GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+            CHECKED_GL_CALL(glEnableVertexAttribArray,0);
+            CHECKED_GL_CALL(glVertexAttribPointer,0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
+            CHECKED_GL_CALL(glEnableVertexAttribArray,1);
+            CHECKED_GL_CALL(glVertexAttribPointer,1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
+        }
+        CHECKED_GL_CALL(glBindVertexArray,m_quadVAO);
+        CHECKED_GL_CALL(glDrawArrays,GL_TRIANGLE_STRIP, 0, 4);
+        CHECKED_GL_CALL(glBindVertexArray,0);
+
+    }
+
+    void GraphicsController::bloom() {
+
+    }
 } // namespace engine::graphics
