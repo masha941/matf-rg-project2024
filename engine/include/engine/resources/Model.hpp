@@ -5,9 +5,11 @@
 
 #ifndef MATF_RG_PROJECT_MODEL_HPP
 #define MATF_RG_PROJECT_MODEL_HPP
+
 #include <engine/resources/Mesh.hpp>
 #include <algorithm>
 #include <utility>
+
 
 namespace engine::resources {
     /**
@@ -29,11 +31,12 @@ namespace engine::resources {
          * @brief Destroys the model in the OpenGL context.
          */  
         void destroy();
+        void prepare_instance_matrices(int amount, glm::mat4 *modelMatrices);
 
         /**
-        * @brief Returns the meshes in the model.
-        * @returns The meshes in the model.
-        */  
+         * @brief Returns the meshes in the model.
+         * @returns The meshes in the model.
+         */  
         const std::vector<Mesh> &meshes() const {
             return m_meshes;
         }

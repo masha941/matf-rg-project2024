@@ -22,8 +22,7 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KeyId::KEY_H).state() == engine::platform::Key::State::JustPressed) {
             set_enable(!is_enabled());
-            m_enabled = !m_enabled;
-            platform->set_enable_cursor(m_enabled);
+            platform->set_enable_cursor(is_enabled());
         }
     }
 
@@ -38,6 +37,8 @@ namespace app {
         graphics->begin_gui();
 
         ImGui::Begin("ImGui");
+        ImGuiIO &io = ImGui::GetIO();
+        io.FontGlobalScale = 1.2f;
 
         ImGuiStyle &style = ImGui::GetStyle();
         ImVec4 *colors    = style.Colors;

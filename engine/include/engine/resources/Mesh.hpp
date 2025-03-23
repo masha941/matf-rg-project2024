@@ -6,9 +6,9 @@
 #ifndef MATF_RG_PROJECT_MESH_HPP
 #define MATF_RG_PROJECT_MESH_HPP
 
+#include <engine/resources/Texture.hpp>
 #include <glm/glm.hpp>
 #include <vector>
-#include <engine/resources/Texture.hpp>
 
 namespace engine::resources {
     /**
@@ -46,15 +46,15 @@ namespace engine::resources {
         uint32_t get_vao() const;
 
         /**
-        * @brief Constructs a Mesh object.
-        * @param vertices The vertices in the mesh.
-        * @param indices The indices in the mesh.
-        * @param textures The textures in the mesh.
+         * @brief Constructs a Mesh object.
+         * @param vertices The vertices in the mesh.
+         * @param indices The indices in the mesh.
+         * @param textures The textures in the mesh.
          */
         Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices,
              std::vector<Texture *> textures);
 
-    private:
+    public:
         uint32_t m_vao{0};
         uint32_t m_num_indices{0};
         std::vector<Texture *> m_textures;

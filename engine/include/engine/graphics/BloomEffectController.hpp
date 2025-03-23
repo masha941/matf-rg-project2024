@@ -1,9 +1,5 @@
-//
-// Created by masa on 14/03/25.
-//
-
-#ifndef BLOOMEFFECT_HPP
-#define BLOOMEFFECT_HPP
+#ifndef BLOOMEFFECTCONTROLLER_HPP
+#define BLOOMEFFECTCONTROLLER_HPP
 #include <engine/core/Controller.hpp>
 
 namespace engine::graphics {
@@ -25,4 +21,4 @@ namespace engine::graphics {
     };
 } // namespace engine::graphics
 
-#endif // BLOOMEFFECT_HPP
+#endif // BLOOMEFFECTCONTROLLER_HPP

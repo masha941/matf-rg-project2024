@@ -1,19 +1,19 @@
 //
 // Created by masa on 29/01/25.
 //
-
+#include "../../engine/libs/glad/include/glad/glad.h"
 #include <engine/graphics/BloomEffectController.hpp>
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformController.hpp>
 #include <engine/resources/ResourcesController.hpp>
-#include "../../engine/libs/glad/include/glad/glad.h"
 
 #include "MainController.hpp"
 
 #include <GuiController.hpp>
 #include <random>
 #include <spdlog/spdlog.h>
+
 
 namespace engine::test::app {
     class GUIController;
@@ -84,9 +84,9 @@ namespace app {
             camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt);
         }
         if (platform->key(engine::platform::KeyId::KEY_LEFT_SHIFT).is_down()) {
-            camera->MovementSpeed = 12.0f;
+            camera->MovementSpeed = 15.0f;
         } else if (platform->key(engine::platform::KeyId::KEY_LEFT_SHIFT).is_up()) {
-            camera->MovementSpeed = 8.0f;
+            camera->MovementSpeed = 10.0f;
         }
     }
 
@@ -115,7 +115,9 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(20.0f, -15.0f, 0.0f));
         model           = glm::scale(model, glm::vec3(3.0f));
@@ -146,7 +148,9 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         shader->set_mat4("model", glm::mat4(1.0f));
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(20.0f, -15.0f, 0.0f));
@@ -180,7 +184,11 @@ namespace app {
         shader->set_vec3("moonLightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
+
         glm::mat4 model1 = glm::mat4(1.0f);
         glm::mat4 model2 = glm::mat4(1.0f);
         glm::mat4 model3 = glm::mat4(1.0f);
@@ -257,32 +265,8 @@ namespace app {
 
             modelMatrices[i] = model;
         }
-        delete[] modelMatrices;
-        unsigned int buffer;
 
-        glGenBuffers(1, &buffer);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
-        for (unsigned int i = 0; i < butterfly->meshes().size(); i++) {
-            unsigned int VAO = butterfly->meshes()[i].get_vao();
-            glBindVertexArray(VAO);
-            std::size_t vec4Size = sizeof(glm::vec4);
-            glEnableVertexAttribArray(3);
-            glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) 0);
-            glEnableVertexAttribArray(4);
-            glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (1 * vec4Size));
-            glEnableVertexAttribArray(5);
-            glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (2 * vec4Size));
-            glEnableVertexAttribArray(6);
-            glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) (3 * vec4Size));
-
-            glVertexAttribDivisor(3, 1);
-            glVertexAttribDivisor(4, 1);
-            glVertexAttribDivisor(5, 1);
-            glVertexAttribDivisor(6, 1);
-
-            glBindVertexArray(0);
-        }
+        *butterfly->prepare_instance_matrices(amount, modelMatrices);
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(7.0f, 30.0f, -1.0f));
@@ -298,9 +282,12 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
 
         butterfly->draw_instanced(shader, amount);
+        delete[] modelMatrices;
     }
     void MainController::draw_garden() {
         auto resources                    = engine::core::Controller::get<engine::resources::ResourcesController>();
@@ -323,7 +310,9 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
 
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(180.0);
@@ -356,7 +345,9 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(90.0);
@@ -390,7 +381,9 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(70.0f, -15.5f, -30.0f));
         model           = glm::scale(model, glm::vec3(2.0f));
@@ -420,7 +413,9 @@ namespace app {
 
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(20.0f, -15.0f, -30.0f));
         model           = glm::scale(model, glm::vec3(1.0f));
@@ -438,7 +433,9 @@ namespace app {
         shader->use();
         shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(21.0f, -5.0f, 2.0f));
         model           = glm::scale(model, glm::vec3(7.0f));
@@ -456,7 +453,9 @@ namespace app {
 
         shader->use();
         shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 view = graphics->camera()->view_matrix();
+        view           = glm::scale(view, glm::vec3(0.7f));
+        shader->set_mat4("view", view);
 
         glm::mat4 model2 = glm::mat4(1.0f);
         glm::mat4 model3 = glm::mat4(1.0f);
@@ -519,7 +518,6 @@ namespace app {
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         bloom->render_bloom();
-        platform->swap_buffers();
     }
 
     void MainController::draw() {

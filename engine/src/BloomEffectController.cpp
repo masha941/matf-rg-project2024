@@ -1,13 +1,10 @@
-//
-// Created by masa on 14/03/25.
-//
 #include <../libs/glad/include/glad/glad.h>
 
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/resources/ResourcesController.hpp>
 #include <spdlog/spdlog.h>
-#include "engine/graphics/BloomEffect.hpp"
+#include "engine/graphics/BloomEffectController.hpp"
 
 namespace engine::graphics {
 

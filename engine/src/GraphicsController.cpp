@@ -32,9 +32,6 @@ namespace engine::graphics {
         platform->register_platform_event_observer(std::make_unique<GraphicsPlatformEventObserver>(this));
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-
-        io.FontGlobalScale = 1.2f;
 
         RG_GUARANTEE(ImGui_ImplGlfw_InitForOpenGL(handle, true), "ImGUI failed to initialize for OpenGL");
         RG_GUARANTEE(ImGui_ImplOpenGL3_Init("#version 330 core"), "ImGUI failed to initialize for OpenGL");
@@ -107,10 +104,6 @@ namespace engine::graphics {
         CHECKED_GL_CALL(glBindVertexArray,m_quadVAO);
         CHECKED_GL_CALL(glDrawArrays,GL_TRIANGLE_STRIP, 0, 4);
         CHECKED_GL_CALL(glBindVertexArray,0);
-
-    }
-
-    void GraphicsController::bloom() {
 
     }
 } // namespace engine::graphics

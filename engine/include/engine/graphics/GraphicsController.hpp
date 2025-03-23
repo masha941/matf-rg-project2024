@@ -84,7 +84,6 @@ namespace engine::graphics {
         */
         void draw_skybox(const resources::Shader *shader, const resources::Skybox *skybox);
         void renderQuad();
-        void bloom();
 
         Camera *camera() {
             return &m_camera;
