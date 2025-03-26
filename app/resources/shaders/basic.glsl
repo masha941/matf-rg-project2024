@@ -46,6 +46,8 @@ uniform vec3 viewPos;
 uniform vec3 LampPos[5];
 uniform vec3 LampColor[5];
 
+uniform float specularStrength;
+
 void main() {
     float specularStrength = 0.01;
     vec3 color = texture(texture_diffuse1, TexCoords).rgb;

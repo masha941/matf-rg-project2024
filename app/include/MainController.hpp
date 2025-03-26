@@ -1,18 +1,9 @@
-//
-// Created by masa on 29/01/25.
-//
-
 #ifndef MAINCONTROLLER_HPP
 #define MAINCONTROLLER_HPP
 #include <engine/core/Controller.hpp>
-#include <glm/glm.hpp>
+#include "Light.hpp"
 
 namespace app {
-
-    extern float radius;
-    extern float light_gazebo;
-    extern glm::vec3 lampColors[5];
-
     class MainController : public engine::core::Controller {
 
         void initialize() override;
@@ -31,8 +22,6 @@ namespace app {
         void draw_light();
         void draw_street_lamp();
         void draw_butterflies_delayed();
-        void prepare_hdr();
-        void finalize_bloom();
         void draw() override;
         void begin_draw() override;
         void end_draw() override;
@@ -41,6 +30,23 @@ namespace app {
         std::string_view name() const override {
             return "app::MainController";
         }
+        float get_radius() const {
+            return m_radius;
+        }
+        float get_light_gazebo() const {
+            return m_light_gazebo;
+        }
+        void set_radius(float radius) {
+            m_radius = radius;
+        }
+        void set_light_gazebo(float light) {
+            m_light_gazebo = light;
+        }
+        Light light;
+
+    private:
+        float m_radius       = 15.0f;
+        float m_light_gazebo = 20.0f;
     };
 
 } // namespace app

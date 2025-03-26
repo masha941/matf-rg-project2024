@@ -1,7 +1,3 @@
-//
-// Created by masa on 29/01/25.
-//
-#include "../../engine/libs/glad/include/glad/glad.h"
 #include <engine/graphics/BloomEffectController.hpp>
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
@@ -14,26 +10,10 @@
 #include <random>
 #include <spdlog/spdlog.h>
 
-
 namespace engine::test::app {
     class GUIController;
 }
 namespace app {
-
-    float radius       = 15.0f;
-    float light_gazebo = 20.0f;
-
-    glm::vec3 lampPositions[5] = {glm::vec3(20.0f, -2.0f, -23.0f), glm::vec3(90.0f, 2.0f, -20.0f),
-                                  glm::vec3(55.0f, 2.0f, -20.0f), glm::vec3(90.0f, 2.0f, -40.5f),
-                                  glm::vec3(55.0f, 2.0f, -40.5f)};
-
-    glm::vec3 lampColors[5] = {
-            glm::vec3(30.0f, 5.0f, 25.0f), // pink
-            glm::vec3(30.0f, 30.0f, 5.0f), // yellow
-            glm::vec3(5.0f, 5.0f, 30.0f),  // blue
-            glm::vec3(5.0f, 30.0f, 5.0f),  // green
-            glm::vec3(20.0f, 10.0f, 10.0f) // red
-    };
 
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
     public:
@@ -50,8 +30,10 @@ namespace app {
 
     void MainController::initialize() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        auto bloom    = engine::core::Controller::get<engine::graphics::BloomEffectController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
+        bloom->hdr_bloom_setup();
     }
 
     bool MainController::loop() {
@@ -103,11 +85,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.4f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -136,11 +119,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.1f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -173,11 +157,12 @@ namespace app {
         shader->use();
         shader->set_vec3("viewPos", camera->Position);
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.3f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -249,11 +234,11 @@ namespace app {
             glm::mat4 model    = glm::mat4(1.0f);
             float angle        = (float) i / (float) amount * 360.0f;
             float displacement = dist(mt);
-            float x            = sin(angle) * radius + displacement;
+            float x            = sin(angle) * m_radius + displacement;
             displacement       = dist(mt);
             float y            = displacement * 0.4f;
             displacement       = dist(mt);
-            float z            = cos(angle) * radius + displacement;
+            float z            = cos(angle) * m_radius + displacement;
             model              = glm::translate(model, gazeboPos + glm::vec3(x, y, z));
 
             float scale = 0.5f;
@@ -266,15 +251,15 @@ namespace app {
             modelMatrices[i] = model;
         }
 
-        *butterfly->prepare_instance_matrices(amount, modelMatrices);
+        butterfly->prepare_instance_matrices(amount, modelMatrices);
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(7.0f, 30.0f, -1.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -298,11 +283,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.01f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -333,11 +319,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.3f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -369,11 +356,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.4f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -401,11 +389,12 @@ namespace app {
 
         shader->use();
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
+        shader->set_float("specularStrength", 0.0f);
 
         for (int i = 0; i < 5; i++) {
-            shader->set_vec3("LampPos[" + std::to_string(i) + "]", lampPositions[i]);
-            shader->set_vec3("LampColor[" + std::to_string(i) + "]", lampColors[i]);
+            shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
+            shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
         shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
@@ -431,7 +420,7 @@ namespace app {
         engine::resources::Shader *shader = resources->shader("light");
 
         shader->use();
-        shader->set_vec3("LightColor", glm::vec3(light_gazebo, light_gazebo, light_gazebo));
+        shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
         view           = glm::scale(view, glm::vec3(0.7f));
@@ -481,7 +470,7 @@ namespace app {
 
         int i = 0;
         for (auto &model: {model1, model2, model3, model4, model5}) {
-            shader->set_vec3("LightColor", lampColors[i]);
+            shader->set_vec3("LightColor", light.get_lamp_colors()[i]);
             shader->set_mat4("model", model);
             lamp->draw(shader);
             i++;
@@ -493,7 +482,7 @@ namespace app {
         auto current_time            = platform->frame_time().current;
         static double butterflyDelay = -1.0;
         double delay                 = 3.0;
-        if (light_gazebo > 50.0f) {
+        if (m_light_gazebo > 50.0f) {
             draw_statue();
             if (butterflyDelay < 0)
                 butterflyDelay = current_time;
@@ -504,24 +493,9 @@ namespace app {
             butterflyDelay = -1.0;
     }
 
-    void MainController::prepare_hdr() {
-        auto bloom = engine::core::Controller::get<engine::graphics::BloomEffectController>();
-
-        glBindFramebuffer(GL_FRAMEBUFFER, bloom->hdrFBO);
-        glViewport(0, 0, bloom->SCR_WIDTH, bloom->SCR_HEIGHT);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
-    void MainController::finalize_bloom() {
-        auto bloom    = engine::core::Controller::get<engine::graphics::BloomEffectController>();
-        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        bloom->render_bloom();
-    }
-
     void MainController::draw() {
-        prepare_hdr();
+        auto bloom = engine::core::Controller::get<engine::graphics::BloomEffectController>();
+        bloom->prepare_hdr();
 
         draw_terrain();
         draw_temple();
@@ -534,6 +508,6 @@ namespace app {
         draw_street_lamp();
         draw_skybox();
 
-        finalize_bloom();
+        bloom->finalize_bloom();
     }
 } // namespace app

@@ -154,9 +154,6 @@ namespace engine::core {
         virtual void begin_draw() {
         }
 
-        virtual void bloom() {
-        }
-
         /**
         * @brief Draw the world state. Executes in the @ref core::App::draw.
         */

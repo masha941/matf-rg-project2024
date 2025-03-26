@@ -1,5 +1,3 @@
-#include <glad/glad.h>
-
 #include <engine/core/App.hpp>
 #include <engine/graphics/BloomEffectController.hpp>
 #include <engine/platform/PlatformController.hpp>
@@ -8,7 +6,6 @@
 #include <spdlog/spdlog.h>
 
 #include <engine/graphics/GraphicsController.hpp>
-#include <engine/graphics/OpenGL.hpp>
 #include <engine/util/ArgParser.hpp>
 #include <engine/util/Configuration.hpp>
 #include <engine/util/Utils.hpp>
@@ -64,10 +61,9 @@ namespace engine::core {
         }
 
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        auto bloom    = engine::core::Controller::get<engine::graphics::BloomEffectController>();
 
         platform->set_enable_cursor(false);
-        bloom->hdr_bloom_setup();
+
     }
 
     bool App::loop() {

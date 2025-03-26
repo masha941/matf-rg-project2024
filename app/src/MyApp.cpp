@@ -1,7 +1,3 @@
-//
-// Created by masa on 28/01/25.
-//
-
 #include "../include/MyApp.hpp"
 
 #include <GuiController.hpp>
@@ -17,4 +13,4 @@ namespace app {
         main_controller->before(gui_controller);
     }
 
-} // app
+} // namespace app

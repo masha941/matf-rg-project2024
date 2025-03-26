@@ -1,10 +1,9 @@
 
+#include <glad/glad.h>
 #include <engine/resources/Model.hpp>
 #include <engine/resources/Shader.hpp>
-#include <glad/glad.h>
+
 #include <vector>
-#include <string>
-#include <filesystem>
 
 namespace engine::resources {
 
@@ -34,10 +33,12 @@ namespace engine::resources {
         glGenBuffers(1, &buffer);
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), modelMatrices, GL_STATIC_DRAW);
-        for (const auto& mesh: this->m_meshes) {
+
+        for (const auto &mesh: this->m_meshes) {
             unsigned int VAO = mesh.get_vao();
             glBindVertexArray(VAO);
             std::size_t vec4Size = sizeof(glm::vec4);
+
             glEnableVertexAttribArray(3);
             glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void *) 0);
             glEnableVertexAttribArray(4);
@@ -55,4 +56,4 @@ namespace engine::resources {
             glBindVertexArray(0);
         }
     }
-}
+} // namespace engine::resources

@@ -5,19 +5,20 @@
 namespace engine::graphics {
     class BloomEffectController final : public core::Controller {
     public:
-        unsigned int pingpongFBO[2];
-        unsigned int pingpongColorbuffers[2];
-        unsigned int hdrFBO;
-        unsigned int colorBuffers[2];
-        float exposure                = 1.0f;
-        bool bloom                    = true;
-        const unsigned int SCR_WIDTH  = 1920;
-        const unsigned int SCR_HEIGHT = 1080;
         void render_bloom();
+        void prepare_hdr();
+        void finalize_bloom();
         void hdr_bloom_setup();
 
     private:
-
+        unsigned int m_pingpongFBO[2];
+        unsigned int m_pingpongColorbuffers[2];
+        unsigned int m_hdrFBO;
+        unsigned int m_colorBuffers[2];
+        float m_exposure                = 1.0f;
+        bool m_bloom                    = true;
+        const unsigned int m_SCR_WIDTH  = 1920;
+        const unsigned int m_SCR_HEIGHT = 1080;
     };
 } // namespace engine::graphics
 

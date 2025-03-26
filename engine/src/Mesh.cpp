@@ -1,9 +1,9 @@
 #include <glad/glad.h>
 #include <engine/graphics/Camera.hpp>
+#include <engine/graphics/OpenGL.hpp>
 #include <engine/resources/Mesh.hpp>
 #include <engine/resources/Model.hpp>
 #include <engine/resources/Shader.hpp>
-#include <engine/util/Utils.hpp>
 #include <unordered_map>
 
 namespace engine::resources {
@@ -73,17 +73,15 @@ namespace engine::resources {
             glBindTexture(GL_TEXTURE_2D, m_textures[j]->id());
         }
 
-        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(m_num_indices),
-                                GL_UNSIGNED_INT, 0, amount);
+        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(m_num_indices), GL_UNSIGNED_INT, 0, amount);
     }
 
-    uint32_t Mesh::get_vao() const{
+    uint32_t Mesh::get_vao() const {
         return m_vao;
     }
-
 
     void Mesh::destroy() {
         glDeleteVertexArrays(1, &m_vao);
     }
 
-}
+} // namespace engine::resources
