@@ -2,11 +2,18 @@
 
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
+#include <engine/platform/PlatformController.hpp>
 #include <engine/resources/ResourcesController.hpp>
 #include <spdlog/spdlog.h>
 #include "engine/graphics/BloomEffectController.hpp"
 
 namespace engine::graphics {
+
+    void BloomEffectController::initialize() {
+        auto platform = engine::core::Controller::get<platform::PlatformController>();
+        m_SCR_WIDTH   = platform->window()->width();
+        m_SCR_HEIGHT  = platform->window()->height();
+    }
 
     void BloomEffectController::hdr_bloom_setup() {
         CHECKED_GL_CALL(glGenFramebuffers, 1, &m_hdrFBO);
@@ -57,7 +64,6 @@ namespace engine::graphics {
         engine::resources::Shader *shader = resources->shader("basic");
         engine::resources::Shader *blur_shader = resources->shader("blur");
         engine::resources::Shader *bloom_final = resources->shader("bloom_final");
-        engine::resources::Shader *light       = resources->shader("light");
 
         shader->use();
         shader->set_int("texture_diffuse1", 0);

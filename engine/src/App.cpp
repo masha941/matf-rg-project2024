@@ -44,7 +44,8 @@ namespace engine::core {
         begin->before(platform);
         platform->before(graphics);
         graphics->before(resources);
-        resources->before(end);
+        resources->before(bloom);
+        bloom->before(end);
     }
 
     void App::initialize() {
@@ -63,7 +64,6 @@ namespace engine::core {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
 
         platform->set_enable_cursor(false);
-
     }
 
     bool App::loop() {

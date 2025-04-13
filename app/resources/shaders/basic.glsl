@@ -51,6 +51,7 @@ uniform float specularStrength;
 void main() {
     float specularStrength = 0.01;
     vec3 color = texture(texture_diffuse1, TexCoords).rgb;
+
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 

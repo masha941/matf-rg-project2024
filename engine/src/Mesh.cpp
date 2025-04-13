@@ -66,14 +66,15 @@ namespace engine::resources {
     }
 
     void Mesh::draw_instanced(const Shader *shader, int amount) {
-        glBindVertexArray(m_vao);
+        CHECKED_GL_CALL(glBindVertexArray, m_vao);
 
         for (unsigned int j = 0; j < m_textures.size(); j++) {
-            glActiveTexture(GL_TEXTURE0 + j);
-            glBindTexture(GL_TEXTURE_2D, m_textures[j]->id());
+            CHECKED_GL_CALL(glActiveTexture, GL_TEXTURE0 + j);
+            CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_textures[j]->id());
         }
 
-        glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(m_num_indices), GL_UNSIGNED_INT, 0, amount);
+        CHECKED_GL_CALL(glDrawElementsInstanced, GL_TRIANGLES, static_cast<unsigned int>(m_num_indices),
+                        GL_UNSIGNED_INT, nullptr, amount);
     }
 
     uint32_t Mesh::get_vao() const {

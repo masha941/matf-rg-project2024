@@ -75,7 +75,6 @@ namespace engine::core {
         * @brief The first function that the engine calls to do its internal Controller classes `engine_setup`.
         */
         void engine_setup(int argc, char **argv);
-        void renderQuad();
 
         /**
          * @brief Override to define your custom app setup that gets called after the `engine_setup`.
@@ -89,7 +88,6 @@ namespace engine::core {
         * by calling @ref engine::core::Controller::get<TController>()
         */
         void initialize();
-        void bloomset();
 
         /**
          * @brief Processes all pending events. Calls @ref engine::core::Controller::poll_events for registered

@@ -10,6 +10,8 @@
 #include <random>
 #include <spdlog/spdlog.h>
 
+#include "../../engine/libs/glad/include/glad/glad.h"
+
 namespace engine::test::app {
     class GUIController;
 }
@@ -99,7 +101,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(20.0f, -15.0f, 0.0f));
@@ -133,7 +135,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         shader->set_mat4("model", glm::mat4(1.0f));
         glm::mat4 model = glm::mat4(1.0f);
@@ -171,7 +173,7 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
 
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
 
         glm::mat4 model1 = glm::mat4(1.0f);
@@ -221,8 +223,7 @@ namespace app {
 
         unsigned int amount = 200;
         glm::mat4 *modelMatrices;
-        modelMatrices = new glm::mat4[amount];
-        srand(current_time);
+        modelMatrices       = new glm::mat4[amount];
         float offset        = 1.5f;
         glm::vec3 gazeboPos = glm::vec3(20.0f, -3.0f, 0.0f);
 
@@ -268,7 +269,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
 
         butterfly->draw_instanced(shader, amount);
@@ -297,14 +298,14 @@ namespace app {
 
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(180.0);
-        model           = glm::translate(model, glm::vec3(30.0f, -24.0f, 0.0f));
+        model           = glm::translate(model, glm::vec3(90.0f, -38.0f, 90.0f));
         model           = glm::rotate(model, angle, glm::vec3(1, 0, 0));
-        model           = glm::scale(model, glm::vec3(1.0f));
+        model           = glm::scale(model, glm::vec3(3.0f));
         shader->set_mat4("model", model);
 
         garden->draw(shader);
@@ -333,7 +334,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
@@ -370,7 +371,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(70.0f, -15.5f, -30.0f));
@@ -391,7 +392,6 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.0f);
-
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
             shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
@@ -403,7 +403,7 @@ namespace app {
         shader->set_vec3("viewPos", camera->Position);
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(20.0f, -15.0f, -30.0f));
@@ -423,7 +423,7 @@ namespace app {
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model           = glm::translate(model, glm::vec3(21.0f, -5.0f, 2.0f));
@@ -443,7 +443,7 @@ namespace app {
         shader->use();
         shader->set_mat4("projection", graphics->projection_matrix());
         glm::mat4 view = graphics->camera()->view_matrix();
-        view           = glm::scale(view, glm::vec3(0.7f));
+        view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
 
         glm::mat4 model2 = glm::mat4(1.0f);
@@ -497,15 +497,15 @@ namespace app {
         auto bloom = engine::core::Controller::get<engine::graphics::BloomEffectController>();
         bloom->prepare_hdr();
 
+        draw_garden();
         draw_terrain();
-        draw_temple();
+        draw_street_lamp();
         draw_gazebo();
+        draw_light();
+        draw_temple();
+        draw_butterflies_delayed();
         draw_columns();
         draw_tree();
-        draw_butterflies_delayed();
-        draw_garden();
-        draw_light();
-        draw_street_lamp();
         draw_skybox();
 
         bloom->finalize_bloom();
