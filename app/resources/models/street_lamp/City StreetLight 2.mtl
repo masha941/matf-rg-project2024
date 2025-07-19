@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd metal.jpg
+map_Kd proba.jpg
 
 
 newmtl Material.002
@@ -22,7 +22,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd pink.png
+map_Kd proba.jpg
 
 newmtl Material.003
 Ns 834.273662
@@ -33,4 +33,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd metal.jpg
+map_Kd proba.jpg

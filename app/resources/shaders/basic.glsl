@@ -12,11 +12,11 @@ out vec3 FragPos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float texCoordScale;
 
 void main() {
     FragPos = vec3(model * vec4(aPos, 1.0));
-    TexCoords = aTexCoords;
-
+    TexCoords = aTexCoords * texCoordScale;;
     mat3 normalMatrix = transpose(inverse(mat3(model)));
     Normal = normalize(normalMatrix * aNormal);
 

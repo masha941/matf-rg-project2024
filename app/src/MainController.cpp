@@ -10,8 +10,6 @@
 #include <random>
 #include <spdlog/spdlog.h>
 
-#include "../../engine/libs/glad/include/glad/glad.h"
-
 namespace engine::test::app {
     class GUIController;
 }
@@ -89,6 +87,7 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.4f);
+        shader->set_float("texCoordScale", 1.0f);
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -104,7 +103,7 @@ namespace app {
         view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(20.0f, -15.0f, 0.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -17.0f, -3.0f));
         model           = glm::scale(model, glm::vec3(3.0f));
         shader->set_mat4("model", model);
 
@@ -123,6 +122,8 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.1f);
+        shader->set_float("texCoordScale", 1.0f);
+
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -139,7 +140,7 @@ namespace app {
         shader->set_mat4("view", view);
         shader->set_mat4("model", glm::mat4(1.0f));
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(20.0f, -15.0f, 0.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -17.5f, -3.0f));
         float angle     = glm::radians(270.0);
         model           = glm::rotate(model, angle, glm::vec3(0, 1, 0));
         model           = glm::scale(model, glm::vec3(0.04f));
@@ -161,6 +162,8 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.3f);
+        shader->set_float("texCoordScale", 1.0f);
+
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -181,13 +184,13 @@ namespace app {
         glm::mat4 model3 = glm::mat4(1.0f);
         glm::mat4 model4 = glm::mat4(1.0f);
 
-        model1 = glm::translate(model1, glm::vec3(6.5f, -15.0f, 13.0f)); // front left
+        model1 = glm::translate(model1, glm::vec3(-1.0f, -17.5f, 10.0f)); // front left
 
-        model2 = glm::translate(model2, glm::vec3(34.5f, -15.0f, 13.0f)); // back left
+        model2 = glm::translate(model2, glm::vec3(27.5f, -17.5f, 10.0f)); // back left
 
-        model3 = glm::translate(model3, glm::vec3(6.5f, -15.0f, -12.5f)); // front right
+        model3 = glm::translate(model3, glm::vec3(-1.0f, -17.5f, -15.5f)); // front right
 
-        model4 = glm::translate(model4, glm::vec3(34.5f, -15.0f, -12.5f)); // back right
+        model4 = glm::translate(model4, glm::vec3(27.5f, -17.5f, -15.5f)); // back right
 
         for (auto &model: {model1, model2, model3, model4}) {
             shader->set_mat4("model", model);
@@ -225,7 +228,7 @@ namespace app {
         glm::mat4 *modelMatrices;
         modelMatrices       = new glm::mat4[amount];
         float offset        = 1.5f;
-        glm::vec3 gazeboPos = glm::vec3(20.0f, -3.0f, 0.0f);
+        glm::vec3 gazeboPos = glm::vec3(13.0f, -17.5f, -3.0f);
 
         std::random_device rd;
         std::mt19937 mt(rd());
@@ -263,7 +266,7 @@ namespace app {
             shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
         }
 
-        shader->set_vec3("moonLightDir", glm::vec3(-25.0f, 30.0f, 0.0f));
+        shader->set_vec3("moonLightDir", glm::vec3(-22.0f, 30.0f, 0.0f));
         shader->set_vec3("moonLightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         shader->set_vec3("viewPos", camera->Position);
@@ -286,6 +289,7 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.01f);
+        shader->set_float("texCoordScale", 10.0f);
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -303,9 +307,9 @@ namespace app {
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(180.0);
-        model           = glm::translate(model, glm::vec3(90.0f, -38.0f, 90.0f));
+        model           = glm::translate(model, glm::vec3(140.0f, -87.0f, 90.0f));
         model           = glm::rotate(model, angle, glm::vec3(1, 0, 0));
-        model           = glm::scale(model, glm::vec3(3.0f));
+        model           = glm::scale(model, glm::vec3(10.0f));
         shader->set_mat4("model", model);
 
         garden->draw(shader);
@@ -322,6 +326,7 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.3f);
+        shader->set_float("texCoordScale", 1.0f);
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -339,7 +344,7 @@ namespace app {
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(90.0);
-        model           = glm::translate(model, glm::vec3(20.0f, -14.0f, 0.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -16.5f, -3.0f));
         model           = glm::rotate(model, angle, glm::vec3(0, 1, 0));
         model           = glm::rotate(model, angle, glm::vec3(1, 0, 0));
         model           = glm::scale(model, glm::vec3(0.5f));
@@ -359,6 +364,7 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.4f);
+        shader->set_float("texCoordScale", 1.0f);
 
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
@@ -392,6 +398,8 @@ namespace app {
         shader->set_vec3("LightPos", glm::vec3(21.0f, -5.0f, 2.0f));
         shader->set_vec3("LightColor", glm::vec3(m_light_gazebo, m_light_gazebo, m_light_gazebo));
         shader->set_float("specularStrength", 0.0f);
+        shader->set_float("texCoordScale", 1.0f);
+
         for (int i = 0; i < 5; i++) {
             shader->set_vec3("LampPos[" + std::to_string(i) + "]", light.get_lamp_positions()[i]);
             shader->set_vec3("LampColor[" + std::to_string(i) + "]", light.get_lamp_colors()[i]);
@@ -406,7 +414,7 @@ namespace app {
         view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(20.0f, -15.0f, -30.0f));
+        model           = glm::translate(model, glm::vec3(20.0f, -19.0f, -30.0f));
         model           = glm::scale(model, glm::vec3(1.0f));
         shader->set_mat4("model", model);
 
@@ -426,7 +434,7 @@ namespace app {
         view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(21.0f, -5.0f, 2.0f));
+        model           = glm::translate(model, glm::vec3(22.0f, -7.5f, -1.0f));
         model           = glm::scale(model, glm::vec3(7.0f));
         shader->set_mat4("model", model);
 
@@ -451,21 +459,21 @@ namespace app {
         glm::mat4 model4 = glm::mat4(1.0f);
         glm::mat4 model5 = glm::mat4(1.0f);
 
-        model2 = glm::translate(model2, glm::vec3(90.0f, -10.0f, -20.0f));
-        model2 = glm::scale(model2, glm::vec3(2.5f));
+        model2 = glm::translate(model2, glm::vec3(90.0f, -13.0f, -20.0f));
+        model2 = glm::scale(model2, glm::vec3(1.1f));
 
-        model3 = glm::translate(model3, glm::vec3(55.0f, -10.0f, -20.0f));
-        model3 = glm::scale(model3, glm::vec3(2.5f));
+        model3 = glm::translate(model3, glm::vec3(55.0f, -13.0f, -20.0f));
+        model3 = glm::scale(model3, glm::vec3(1.1f));
 
-        model4 = glm::translate(model4, glm::vec3(90.0f, -10.0f, -40.5f));
-        model4 = glm::scale(model4, glm::vec3(2.5f));
+        model4 = glm::translate(model4, glm::vec3(90.0f, -13.0f, -40.5f));
+        model4 = glm::scale(model4, glm::vec3(1.1f));
 
-        model5 = glm::translate(model5, glm::vec3(55.0f, -10.0f, -40.5f));
-        model5 = glm::scale(model5, glm::vec3(2.5f));
+        model5 = glm::translate(model5, glm::vec3(55.0f, -13.0f, -40.5f));
+        model5 = glm::scale(model5, glm::vec3(1.1f));
 
         glm::mat4 model1 = glm::mat4(1.0f);
-        model1           = glm::translate(model1, glm::vec3(20.0f, -15.0f, -23.0f));
-        model1           = glm::scale(model1, glm::vec3(2.5f));
+        model1           = glm::translate(model1, glm::vec3(20.0f, -18.0f, -23.0f));
+        model1           = glm::scale(model1, glm::vec3(1.0f));
         shader->set_mat4("model", model1);
 
         int i = 0;
@@ -497,7 +505,6 @@ namespace app {
         auto bloom = engine::core::Controller::get<engine::graphics::BloomEffectController>();
         bloom->prepare_hdr();
 
-        draw_garden();
         draw_terrain();
         draw_street_lamp();
         draw_gazebo();
@@ -506,6 +513,7 @@ namespace app {
         draw_butterflies_delayed();
         draw_columns();
         draw_tree();
+        draw_garden();
         draw_skybox();
 
         bloom->finalize_bloom();
