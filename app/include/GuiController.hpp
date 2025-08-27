@@ -15,7 +15,7 @@ namespace app {
         void initialize() override;
         void draw() override;
         void poll_events() override;
-        void updateLampColors();
+        void update_lamp_colors();
         bool m_enabled = false;
     };
 

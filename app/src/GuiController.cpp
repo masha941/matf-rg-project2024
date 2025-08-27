@@ -22,7 +22,7 @@ namespace app {
         }
     }
 
-    void GUIController::updateLampColors() {
+    void GUIController::update_lamp_colors() {
         auto mainController = engine::core::Controller::get<app::MainController>();
 
         for (int i = 0; i < 5; i++) {
@@ -53,16 +53,16 @@ namespace app {
         ImGui::Text("Change the intensity of the light in gazebo and see what happens!!!");
         ImGui::Spacing();
         ImGui::Separator();
-        float lightgazeboGUI = mainController->get_light_gazebo();
-        ImGui::DragFloat("gazebo light", &lightgazeboGUI, 1, 1.0f, 150.0f, "%f", ImGuiSliderFlags_AlwaysClamp);
-        mainController->set_light_gazebo(lightgazeboGUI);
+        float lightgazebo_gui = mainController->get_light_gazebo();
+        ImGui::DragFloat("gazebo light", &lightgazebo_gui, 1, 1.0f, 150.0f, "%f", ImGuiSliderFlags_AlwaysClamp);
+        mainController->set_light_gazebo(lightgazebo_gui);
 
         ImGui::Spacing();
         ImGui::Separator();
-        if (lightgazeboGUI > 50.0f) {
-            float radiusGUI = mainController->get_radius();
-            ImGui::DragFloat("radius of butterflies", &radiusGUI, 1, 1.0f, 50.0f, "%f", ImGuiSliderFlags_AlwaysClamp);
-            mainController->set_radius(radiusGUI);
+        if (lightgazebo_gui > 50.0f) {
+            float radius_gui = mainController->get_radius();
+            ImGui::DragFloat("radius of butterflies", &radius_gui, 1, 1.0f, 50.0f, "%f", ImGuiSliderFlags_AlwaysClamp);
+            mainController->set_radius(radius_gui);
         }
         ImGui::Spacing();
         ImGui::Separator();
@@ -104,7 +104,7 @@ namespace app {
         colorsChanged |= ImGui::SliderFloat("Brightness 5", &mc_brightness[4], MIN_BRIGHTNESS, MAX_BRIGHTNESS);
 
         if (colorsChanged) {
-            updateLampColors();
+            update_lamp_colors();
         }
 
         ImGui::Spacing();

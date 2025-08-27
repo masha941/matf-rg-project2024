@@ -83,7 +83,7 @@ namespace engine::graphics {
         * @brief Draws a @ref resources::Skybox with the @ref resources::Shader.
         */
         void draw_skybox(const resources::Shader *shader, const resources::Skybox *skybox);
-        void renderQuad();
+        void render_quad();
 
         Camera *camera() {
             return &m_camera;
@@ -159,8 +159,8 @@ namespace engine::graphics {
         void initialize() override;
 
         void terminate();
-        unsigned int m_quadVAO = 0;
-        unsigned int m_quadVBO;
+        unsigned int m_quad_vao = 0;
+        unsigned int m_quad_vbo;
 
         PerspectiveMatrixParams m_perspective_params{};
         OrthographicMatrixParams m_ortho_params{};

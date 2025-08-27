@@ -31,7 +31,7 @@ namespace engine::resources {
          * @brief Destroys the model in the OpenGL context.
          */  
         void destroy();
-        void prepare_instance_matrices(int amount, glm::mat4 *modelMatrices);
+        void prepare_instance_matrices(int amount, glm::mat4 *model_matrices);
 
         /**
          * @brief Returns the meshes in the model.

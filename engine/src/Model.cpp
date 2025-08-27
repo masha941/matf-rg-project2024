@@ -28,12 +28,12 @@ namespace engine::resources {
         }
     }
 
-    void Model::prepare_instance_matrices(int amount, glm::mat4 *modelMatrices) {
+    void Model::prepare_instance_matrices(int amount, glm::mat4 *model_matrices) {
         unsigned int buffer;
 
         CHECKED_GL_CALL(glGenBuffers, 1, &buffer);
         CHECKED_GL_CALL(glBindBuffer, GL_ARRAY_BUFFER, buffer);
-        CHECKED_GL_CALL(glBufferData, GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), modelMatrices, GL_STATIC_DRAW);
+        CHECKED_GL_CALL(glBufferData, GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), model_matrices, GL_STATIC_DRAW);
 
         for (const auto &mesh: this->m_meshes) {
             unsigned int VAO = mesh.get_vao();

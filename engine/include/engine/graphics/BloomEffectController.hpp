@@ -12,14 +12,14 @@ namespace engine::graphics {
         void hdr_bloom_setup();
 
     private:
-        unsigned int m_pingpongFBO[2];
-        unsigned int m_pingpongColorbuffers[2];
-        unsigned int m_hdrFBO;
-        unsigned int m_colorBuffers[2];
+        unsigned int m_pingpong_fbo[2];
+        unsigned int m_pingpong_colorbuffers[2];
+        unsigned int m_hdr_fbo;
+        unsigned int m_color_buffers[2];
         float m_exposure                = 1.0f;
         bool m_bloom                    = true;
-        unsigned int m_SCR_WIDTH;
-        unsigned int m_SCR_HEIGHT;
+        unsigned int m_scr_width;
+        unsigned int m_scr_height;
     };
 } // namespace engine::graphics
 

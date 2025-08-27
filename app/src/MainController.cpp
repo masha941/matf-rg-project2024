@@ -103,7 +103,7 @@ namespace app {
         view           = glm::scale(view, glm::vec3(0.3f));
         shader->set_mat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(13.0f, -17.0f, -3.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -17.5f, -3.0f));
         model           = glm::scale(model, glm::vec3(3.0f));
         shader->set_mat4("model", model);
 
@@ -140,7 +140,7 @@ namespace app {
         shader->set_mat4("view", view);
         shader->set_mat4("model", glm::mat4(1.0f));
         glm::mat4 model = glm::mat4(1.0f);
-        model           = glm::translate(model, glm::vec3(13.0f, -17.5f, -3.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -18.0f, -3.0f));
         float angle     = glm::radians(270.0);
         model           = glm::rotate(model, angle, glm::vec3(0, 1, 0));
         model           = glm::scale(model, glm::vec3(0.04f));
@@ -228,7 +228,7 @@ namespace app {
         glm::mat4 *modelMatrices;
         modelMatrices       = new glm::mat4[amount];
         float offset        = 1.5f;
-        glm::vec3 gazeboPos = glm::vec3(13.0f, -17.5f, -3.0f);
+        glm::vec3 gazeboPos = glm::vec3(13.0f, -3.0f, -3.0f);
 
         std::random_device rd;
         std::mt19937 mt(rd());
@@ -344,7 +344,7 @@ namespace app {
         glm::mat4 model = glm::mat4(1.0f);
         float angle     = glm::radians(270.0);
         float angle2    = glm::radians(90.0);
-        model           = glm::translate(model, glm::vec3(13.0f, -16.5f, -3.0f));
+        model           = glm::translate(model, glm::vec3(13.0f, -17.0f, -3.0f));
         model           = glm::rotate(model, angle, glm::vec3(0, 1, 0));
         model           = glm::rotate(model, angle, glm::vec3(1, 0, 0));
         model           = glm::scale(model, glm::vec3(0.5f));
