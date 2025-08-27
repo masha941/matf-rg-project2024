@@ -11,6 +11,7 @@ S -> BACKWARD<br>
 D -> RIGHT<br>
 A -> LEFT<br>
 H -> IMGUI MENU<br>
+SHIFT -> FASTER CAMERA MOVEMENT
 
 ## Features
 
